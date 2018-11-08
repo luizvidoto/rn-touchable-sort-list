@@ -58,11 +58,11 @@ class Main extends Component {
 ##### Props
 
 - **data**: Array of objects that must have {id: string, order: number}  
-  `item = T = {id: string, order: number, ...}`   
-  `data = T[] = [item1, item2, item3, ...]`   
+  `item = T = {id: string, order: number, ...}`  
+  `data = T[] = [item1, item2, item3, ...]`
 - **renderRow**: Function that receives item, isActive and isTarget values and render it's children.  
-  `(item: T, isActive: boolean, isTarget: boolean) => ReactChild`  
+  `(item: T, isActive: boolean, isTarget: boolean) => ReactChild`
 - **onItemActivation**?: Optional function that receives the item that is moving/active.  
-  `(item: T) => void`  
+  `(item: T) => void`
 - **onOrderChange**: A function that receives the input data but with the order values changed.  
-  `(newData: T[]) => void`  
+  `(newData: T[]) => void`
