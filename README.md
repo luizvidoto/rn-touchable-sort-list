@@ -43,11 +43,11 @@ class Main extends Component {
 	render() {
 		return (
 			<TouchableSortList
-                data={this.state.data}
-                renderRow={this.renderRow}
-                onItemActivation={this.onItemActivation}
-                onOrderChange={this.onOrderChange}
-            />
+				data={this.state.data}
+				renderRow={this.renderRow}
+				onItemActivation={this.onItemActivation}
+				onOrderChange={this.onOrderChange}
+			/>
 		)
 	}
 }
@@ -57,12 +57,12 @@ class Main extends Component {
 
 ##### Props
 
-- **data**: Array of objects that must have {id: string, order: number}
-  `item = T = {id: string, order: number, ...}`
-  `data = T[] = [item1, item2, item3, ...]`
-- **renderRow**: Function that receives item, isActive and isTarget values and render it's children.
-  `(item: T, isActive: boolean, isTarget: boolean) => ReactChild`
-- **onItemActivation**?: Optional function that receives the item that is moving/active.
-  `(item: T) => void`
-- **onOrderChange**: A function that receives the input data but with the order values changed.
-  `(newData: T[]) => void`
+- **data**: Array of objects that must have {id: string, order: number}  
+  `item = T = {id: string, order: number, ...}`   
+  `data = T[] = [item1, item2, item3, ...]`   
+- **renderRow**: Function that receives item, isActive and isTarget values and render it's children.  
+  `(item: T, isActive: boolean, isTarget: boolean) => ReactChild`  
+- **onItemActivation**?: Optional function that receives the item that is moving/active.  
+  `(item: T) => void`  
+- **onOrderChange**: A function that receives the input data but with the order values changed.  
+  `(newData: T[]) => void`  
