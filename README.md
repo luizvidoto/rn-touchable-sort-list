@@ -1,6 +1,6 @@
 ## React Native Sort List
 
-This is a beta package, some issues may appear!
+This is a beta package, some issues may appear!  
 It should work with Redux and normal state for changes.
 
 ### Installation
@@ -40,16 +40,16 @@ class Main extends Component {
     onOrderChange = (newData: T[]) => {
         this.setState({data: newData})
     }
-	render() {
-		return (
-			<TouchableSortList
-				data={this.state.data}
-				renderRow={this.renderRow}
-				onItemActivation={this.onItemActivation}
-				onOrderChange={this.onOrderChange}
-			/>
-		)
-	}
+    render() {
+        return (
+            <TouchableSortList
+                data={this.state.data}
+                renderRow={this.renderRow}
+                onItemActivation={this.onItemActivation}
+                onOrderChange={this.onOrderChange}
+            />
+        )
+    }
 }
 ```
 
