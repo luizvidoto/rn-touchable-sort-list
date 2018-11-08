@@ -36,4 +36,4 @@ export interface RowLayout {
   currentOrder: number | null;
 }
 
-export type ResolveType<T> = (value?: T | undefined | PromiseLike<T>) => void;
+export type ResolveType<T> = Record<string, (result: ResolveReturnType<T>) => void>;

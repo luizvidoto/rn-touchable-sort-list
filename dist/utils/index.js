@@ -1,2 +1,2 @@
-import { isEqual } from "./isEqual";
+import { isEqual } from './isEqual';
 export { isEqual };

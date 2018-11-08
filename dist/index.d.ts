@@ -1,10 +1,10 @@
-import React from "react";
-import { PanResponderGestureState } from "react-native";
-import { LayoutType, RowLayout, DataTypeWise } from "./types";
+import { Component, ReactNode } from 'react';
+import { PanResponderGestureState } from 'react-native';
+import { LayoutType, RowLayout, DataTypeWise } from './types';
 interface TouchableSortListProps<T> {
     data: T[];
     activeItem?: string;
-    renderRow: (item: T, isActive: boolean, isTarget: boolean) => React.ReactNode;
+    renderRow: (item: T, isActive: boolean, isTarget: boolean) => ReactNode;
     onOrderChange: (newData: T[]) => void;
     onItemActivation?: (item: T) => void;
 }
@@ -15,7 +15,7 @@ interface TouchableSortListState {
     rowsLayout: Record<string, RowLayout>;
     scrollEnabled: boolean;
 }
-export default class TouchableSortList<T extends DataTypeWise> extends React.Component<TouchableSortListProps<T>, TouchableSortListState> {
+export default class TouchableSortList<T extends DataTypeWise> extends Component<TouchableSortListProps<T>, TouchableSortListState> {
     private _allLayoutPromises;
     private _allLayoutResolves;
     private _targetItem;
@@ -40,6 +40,6 @@ export default class TouchableSortList<T extends DataTypeWise> extends React.Com
     changeTarget: (target: RowLayout | null, onChangeTarget?: ((target: RowLayout | null) => void) | undefined) => void;
     changeItemsOrder: (activeItem: RowLayout, targetItem: RowLayout, direction: "up" | "down") => void;
     resetItemsOrder: (activeItem: RowLayout, targetItem: RowLayout) => void;
-    onConfirmPosition: (_activeItem: T) => void;
+    onConfirmPosition: (activeItem: T) => void;
 }
 export {};

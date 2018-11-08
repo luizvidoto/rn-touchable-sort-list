@@ -1,17 +1,17 @@
-import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
-import TouchableSortListRow from "./row";
-import { isEqual } from "./utils";
+import React, { Component } from 'react';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import Row from './row';
+import { isEqual } from './utils';
 const emptyLayout = { width: 0, height: 0, x: 0, y: 0 };
 function createPromises(item, receiver) {
     return new Promise((resolve, reject) => {
-        receiver[item.id] = (props) => {
+        receiver[item.id] = props => {
             // console.log('resolving', props)
             resolve(props);
         };
     });
 }
-export default class TouchableSortList extends React.Component {
+export default class TouchableSortList extends Component {
     constructor(props) {
         super(props);
         this._targetItem = null;
@@ -45,9 +45,9 @@ export default class TouchableSortList extends React.Component {
                     layoutReady: true,
                     boundaries: {
                         bottom: totalY - hDiv,
-                        top: totalY + hDiv
+                        top: totalY + hDiv,
                     },
-                    layout: Object.assign({}, layout, { y: totalY })
+                    layout: Object.assign({}, layout, { y: totalY }),
                 };
             })
                 .reduce((p, n) => (Object.assign({}, p, { [n.id]: n })), {});
@@ -59,7 +59,7 @@ export default class TouchableSortList extends React.Component {
             const rl = this.state.rowsLayout[item.id];
             const y = rl ? rl.layout.y : 0;
             const animateTo = rl ? rl.animateTo : null;
-            return (React.createElement(TouchableSortListRow, { key: index, item: item, isTarget: isTarget, y: y, animateTo: animateTo, renderItem: isActive => this.props.renderRow(item, isActive, isTarget), onItemActivation: () => this.onItemActivation(item), enableScroll: this.enableScroll, disableScroll: this.disableScroll, onItemMove: g => this.onItemMove(item, g), onLayout: layout => this.handleOnLayout(layout, item), onConfirmPosition: this.onConfirmPosition }));
+            return (React.createElement(Row, { key: index, item: item, isTarget: isTarget, y: y, animateTo: animateTo, renderItem: isActive => this.props.renderRow(item, isActive, isTarget), onItemActivation: () => this.onItemActivation(item), enableScroll: this.enableScroll, disableScroll: this.disableScroll, onItemMove: g => this.onItemMove(item, g), onLayout: layout => this.handleOnLayout(layout, item), onConfirmPosition: this.onConfirmPosition }));
         };
         this.enableScroll = () => {
             this.setState({ scrollEnabled: true });
@@ -81,7 +81,7 @@ export default class TouchableSortList extends React.Component {
             const { target, rowsLayout, totalHeight, prevTarget } = this.state;
             const activeRow = rowsLayout[item.id];
             // DY é em relação a posição 0
-            const direction = gestureState.dy > 0 ? "down" : "up";
+            const direction = gestureState.dy > 0 ? 'down' : 'up';
             // pegar o y do item atual e adicionar ou subtrair o deltaY para ver se está em cima de outro
             const deltaY = activeRow.layout.y + gestureState.dy;
             // QUANDO ITEM É ATIVADO, TARGET É O PRÓPRIO ESPACO EM QUE ESTÁ
@@ -90,8 +90,7 @@ export default class TouchableSortList extends React.Component {
             // se item estiver fora das pontas, colocar null e depois procurar novo target
             if (target !== null) {
                 if ((deltaY < target.boundaries.bottom && deltaY > 0) ||
-                    (deltaY > target.boundaries.top &&
-                        deltaY < totalHeight - target.layout.height)) {
+                    (deltaY > target.boundaries.top && deltaY < totalHeight - target.layout.height)) {
                     this.changeTarget(null);
                     return false;
                 }
@@ -104,8 +103,8 @@ export default class TouchableSortList extends React.Component {
                 });
             }
             if (prevTarget) {
-                if ((deltaY > prevTarget.boundaries.top && direction === "up") ||
-                    (deltaY < prevTarget.boundaries.bottom && direction === "down")) {
+                if ((deltaY > prevTarget.boundaries.top && direction === 'up') ||
+                    (deltaY < prevTarget.boundaries.bottom && direction === 'down')) {
                     this.resetItemsOrder(activeRow, prevTarget);
                 }
             }
@@ -155,30 +154,28 @@ export default class TouchableSortList extends React.Component {
         this.changeItemsOrder = (activeItem, targetItem, direction) => {
             // const animateTo =
             // 	direction === 'down' ? -targetItem.layout.height : targetItem.layout.height
-            const animateTo = direction === "down" ? "up" : "down";
+            const animateTo = direction === 'down' ? 'up' : 'down';
             this.setState(prevState => {
-                return Object.assign({}, prevState, { rowsLayout: Object.assign({}, prevState.rowsLayout, { [targetItem.id]: Object.assign({}, prevState.rowsLayout[targetItem.id], { currentOrder: direction === "down"
-                                ? targetItem.order - 1
-                                : targetItem.order + 1, animateTo }), [activeItem.id]: Object.assign({}, prevState.rowsLayout[activeItem.id], { currentOrder: targetItem.order, animateTo: null }) }) });
+                return Object.assign({}, prevState, { rowsLayout: Object.assign({}, prevState.rowsLayout, { [targetItem.id]: Object.assign({}, prevState.rowsLayout[targetItem.id], { currentOrder: direction === 'down' ? targetItem.order - 1 : targetItem.order + 1, animateTo }), [activeItem.id]: Object.assign({}, prevState.rowsLayout[activeItem.id], { currentOrder: targetItem.order, animateTo: null }) }) });
             });
         };
         this.resetItemsOrder = (activeItem, targetItem) => {
             this.setState(prevState => ({
-                rowsLayout: Object.assign({}, prevState.rowsLayout, { [targetItem.id]: Object.assign({}, prevState.rowsLayout[targetItem.id], { currentOrder: targetItem.order, animateTo: null }), [activeItem.id]: Object.assign({}, prevState.rowsLayout[activeItem.id], { currentOrder: prevState.rowsLayout[targetItem.id].currentOrder, animateTo: null }) })
+                rowsLayout: Object.assign({}, prevState.rowsLayout, { [targetItem.id]: Object.assign({}, prevState.rowsLayout[targetItem.id], { currentOrder: targetItem.order, animateTo: null }), [activeItem.id]: Object.assign({}, prevState.rowsLayout[activeItem.id], { currentOrder: prevState.rowsLayout[targetItem.id].currentOrder, animateTo: null }) }),
             }));
         };
-        this.onConfirmPosition = (_activeItem) => {
+        this.onConfirmPosition = (activeItem) => {
             const mapped = Object.keys(this.state.rowsLayout)
                 .map(key => {
                 const rl = this.state.rowsLayout[key];
                 return {
                     id: rl.id,
-                    order: rl.currentOrder
+                    order: rl.currentOrder,
                 };
             })
                 .reduce((p, c) => (Object.assign({}, p, { [c.id]: c })), {});
             const newData = this.props.data.map(item => {
-                return Object.assign(item, { order: mapped[item.id].order });
+                return Object.assign({}, item, { order: mapped[item.id].order });
             });
             this.setState({ target: null, prevTarget: null });
             this.props.onOrderChange(newData);
@@ -196,12 +193,12 @@ export default class TouchableSortList extends React.Component {
                     currentOrder: n.order,
                     boundaries: {
                         top: 0,
-                        bottom: 0
+                        bottom: 0,
                     },
                     animateTo: null,
                     layoutReady: false,
-                    layout: Object.assign({}, emptyLayout)
-                } })), {})
+                    layout: Object.assign({}, emptyLayout),
+                } })), {}),
         };
     }
     componentDidMount() {
@@ -214,22 +211,20 @@ export default class TouchableSortList extends React.Component {
             // console.log('MUDOU PROPS.DATA', this.props.data)
             this._allLayoutResolves = {};
             this._allLayoutPromises = this.props.data
-                .filter(item => {
-                if (this.state.rowsLayout[item.id] &&
-                    this.state.rowsLayout[item.id].layoutReady) {
-                    return false;
+                .map(item => {
+                // need to exclude resolved promises to run again
+                if (this.state.rowsLayout[item.id] && this.state.rowsLayout[item.id].layoutReady) {
+                    return undefined;
                 }
-                else {
-                    return true;
-                }
+                return createPromises(item, this._allLayoutResolves);
             })
-                .map(item => createPromises(item, this._allLayoutResolves));
+                .filter(p => p !== undefined);
             const layoutsDone = Object.keys(this.state.rowsLayout).map(key => {
                 const rl = this.state.rowsLayout[key];
                 if (rl.layoutReady) {
                     return {
                         item: this.props.data.find(x => x.id === rl.id),
-                        layout: Object.assign({}, rl.layout, { y: 0 })
+                        layout: Object.assign({}, rl.layout, { y: 0 }),
                     };
                 }
                 return undefined;
@@ -252,6 +247,12 @@ export default class TouchableSortList extends React.Component {
 }
 const styles = StyleSheet.create({
     container: {
-        position: "relative"
-    }
+        position: 'relative',
+    },
 });
+/*
+{y: 0, width: 60, order: 0, b1: -30, b2: 30}
+{y: 60, width: 60, order: 1, b1: 30, b2: 90}
+{y: 120, width: 60, order: 2, b1: 90, b2: 150}
+{y: 180...}
+*/

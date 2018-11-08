@@ -5,7 +5,7 @@ export const isEqual = (a, b) => {
     if (a instanceof Date && b instanceof Date) {
         return a.getTime() === b.getTime();
     }
-    if (!a || !b || (typeof a !== "object" && typeof b !== "object")) {
+    if (!a || !b || (typeof a !== 'object' && typeof b !== 'object')) {
         return a === b;
     }
     if (a === null || a === undefined || b === null || b === undefined) {

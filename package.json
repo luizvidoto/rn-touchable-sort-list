@@ -11,14 +11,18 @@
   "scripts": {
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "react-native",
-    "ios",
     "react-component",
     "react",
-    "android",
+    "sort",
     "list"
   ],
   "author": "Luiz Otavio Vidoto <luiz.vidoto@hotmail.com> (https://github.com/luizvidoto)",
@@ -36,8 +40,6 @@
     "prettier": "^1.15.1",
     "react": "16.4.1",
     "react-native": "0.56.0",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.1"
   }
 }
