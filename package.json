@@ -1,0 +1,33 @@
+{
+  "name": "react-native-sortable-list",
+  "version": "0.1.0",
+  "description": "React Native Touchable Sort List",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "react-component",
+    "react",
+    "android",
+    "list"
+  ],
+  "author": "Luiz Otavio Vidoto <luiz.vidoto@hotmail.com> (https://github.com/luizvidoto)",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "react": "16.4.1",
+    "react-native": "0.56.0",
+    "@types/react-native": "^0.57.0",
+    "typescript": "^3.1.1"
+  }
+}
