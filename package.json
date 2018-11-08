@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/luizvidoto/rn-touchable-sort-list"
   },
   "scripts": {
     "build": "tsc"
@@ -21,9 +21,9 @@
   "author": "Luiz Otavio Vidoto <luiz.vidoto@hotmail.com> (https://github.com/luizvidoto)",
   "license": "MIT",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/luizvidoto/rn-touchable-sort-list/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/luizvidoto/rn-touchable-sort-list",
   "devDependencies": {
     "react": "16.4.1",
     "react-native": "0.56.0",
