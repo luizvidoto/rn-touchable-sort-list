@@ -27,10 +27,8 @@ class Main extends Component {
     }
     renderRow = (item: T, isActive: boolean, isTarget: boolean) => {
         return (
-            <View>
-                <Text
-                    style={{backgroundColor: isActive ? 'green' : 'white'}}
-                >
+            <View style={{backgroundColor: isActive ? 'green' : 'white'}}>
+                <Text>
                     {item.title}
                 </Text>
             </View>
