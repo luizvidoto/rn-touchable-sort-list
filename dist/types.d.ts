@@ -35,4 +35,4 @@ export interface RowLayout {
     animateTo: 'up' | 'down' | null;
     currentOrder: number | null;
 }
-export declare type ResolveType<T> = (value?: T | undefined | PromiseLike<T>) => void;
+export declare type ResolveType<T> = Record<string, (result: ResolveReturnType<T>) => void>;

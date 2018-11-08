@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import Row from './row';
+import TouchSortListRow from './row';
 import { isEqual } from './utils';
 const emptyLayout = { width: 0, height: 0, x: 0, y: 0 };
 function createPromises(item, receiver) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
         receiver[item.id] = props => {
-            // console.log('resolving', props)
             resolve(props);
         };
     });
 }
-export default class TouchableSortList extends Component {
+class TouchSortList extends Component {
     constructor(props) {
         super(props);
+        this._allLayoutPromises = [];
+        this._allLayoutResolves = {};
         this._targetItem = null;
         this.reorderRows = (result) => {
             // console.log(' REORDER ROWS ', result)
@@ -59,7 +60,7 @@ export default class TouchableSortList extends Component {
             const rl = this.state.rowsLayout[item.id];
             const y = rl ? rl.layout.y : 0;
             const animateTo = rl ? rl.animateTo : null;
-            return (React.createElement(Row, { key: index, item: item, isTarget: isTarget, y: y, animateTo: animateTo, renderItem: isActive => this.props.renderRow(item, isActive, isTarget), onItemActivation: () => this.onItemActivation(item), enableScroll: this.enableScroll, disableScroll: this.disableScroll, onItemMove: g => this.onItemMove(item, g), onLayout: layout => this.handleOnLayout(layout, item), onConfirmPosition: this.onConfirmPosition }));
+            return (React.createElement(TouchSortListRow, { key: index, item: item, isTarget: isTarget, y: y, animateTo: animateTo, renderItem: isActive => this.props.renderRow(item, isActive, isTarget), onItemActivation: () => this.onItemActivation(item), enableScroll: this.enableScroll, disableScroll: this.disableScroll, onItemMove: g => this.onItemMove(item, g), onLayout: layout => this.handleOnLayout(layout, item), onConfirmPosition: this.onConfirmPosition }));
         };
         this.enableScroll = () => {
             this.setState({ scrollEnabled: true });
@@ -164,7 +165,7 @@ export default class TouchableSortList extends Component {
                 rowsLayout: Object.assign({}, prevState.rowsLayout, { [targetItem.id]: Object.assign({}, prevState.rowsLayout[targetItem.id], { currentOrder: targetItem.order, animateTo: null }), [activeItem.id]: Object.assign({}, prevState.rowsLayout[activeItem.id], { currentOrder: prevState.rowsLayout[targetItem.id].currentOrder, animateTo: null }) }),
             }));
         };
-        this.onConfirmPosition = (activeItem) => {
+        this.onConfirmPosition = (_activeItem) => {
             const mapped = Object.keys(this.state.rowsLayout)
                 .map(key => {
                 const rl = this.state.rowsLayout[key];
@@ -209,29 +210,47 @@ export default class TouchableSortList extends Component {
     componentDidUpdate(prevProps) {
         if (!isEqual(prevProps.data, this.props.data)) {
             // console.log('MUDOU PROPS.DATA', this.props.data)
+            const layoutsDone = [];
             this._allLayoutResolves = {};
-            this._allLayoutPromises = this.props.data
-                .map(item => {
-                // need to exclude resolved promises to run again
-                if (this.state.rowsLayout[item.id] && this.state.rowsLayout[item.id].layoutReady) {
-                    return undefined;
-                }
-                return createPromises(item, this._allLayoutResolves);
-            })
-                .filter(p => p !== undefined);
-            const layoutsDone = Object.keys(this.state.rowsLayout).map(key => {
-                const rl = this.state.rowsLayout[key];
-                if (rl.layoutReady) {
-                    return {
-                        item: this.props.data.find(x => x.id === rl.id),
+            this._allLayoutPromises = [];
+            this.props.data.forEach(item => {
+                const rl = this.state.rowsLayout[item.id];
+                if (rl && rl.layoutReady) {
+                    // existe ja
+                    layoutsDone.push({
+                        item,
                         layout: Object.assign({}, rl.layout, { y: 0 }),
-                    };
+                    });
                 }
-                return undefined;
+                else {
+                    // fazer promise
+                    this._allLayoutPromises.push(createPromises(item, this._allLayoutResolves));
+                }
             });
+            // this._allLayoutPromises = this.props.data
+            // 	.filter(item => {
+            // 		if (
+            // 			this.state.rowsLayout[item.id] &&
+            // 			this.state.rowsLayout[item.id].layoutReady
+            // 		) {
+            // 			return false
+            // 		}
+            // 		return true
+            // 	})
+            // 	.map(item => createPromises<T>(item, this._allLayoutResolves))
+            // const layoutsDone = Object.keys(this.state.rowsLayout).map(key => {
+            // 	const rl = this.state.rowsLayout[key]
+            // 	if (rl.layoutReady) {
+            // 		return {
+            // 			item: this.props.data.find(x => x.id === rl.id),
+            // 			layout: { ...rl.layout, y: 0 },
+            // 		}
+            // 	}
+            // 	return undefined
+            // })
             Promise.all(this._allLayoutPromises)
                 .then(result => {
-                this.reorderRows([...layoutsDone, ...result].filter(x => x !== undefined));
+                this.reorderRows([...layoutsDone, ...result]);
             })
                 .catch(err => console.error(err));
         }
@@ -250,6 +269,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
 });
+export default TouchSortList;
 /*
 {y: 0, width: 60, order: 0, b1: -30, b2: 30}
 {y: 60, width: 60, order: 1, b1: 30, b2: 90}
