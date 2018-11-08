@@ -1,2 +1,7 @@
-demo.gif
+src
+node_modules
 examples
+.prettierrc
+package-lock.json
+tsconfig.json
+tslint.json

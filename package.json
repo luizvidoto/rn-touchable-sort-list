@@ -1,14 +1,17 @@
 {
-  "name": "react-native-sortable-list",
+  "name": "rn-touchable-sort-list",
   "version": "0.1.0",
   "description": "React Native Touchable Sort List",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/luizvidoto/rn-touchable-sort-list"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json"
   },
   "keywords": [
     "react-native",
@@ -24,10 +27,17 @@
     "url": "https://github.com/luizvidoto/rn-touchable-sort-list/issues"
   },
   "homepage": "https://github.com/luizvidoto/rn-touchable-sort-list",
+  "peerDependencies": {
+    "react": "> 15.0.0",
+    "react-native": ">= 0.50.0"
+  },
   "devDependencies": {
+    "@types/react-native": "^0.57.0",
+    "prettier": "^1.15.1",
     "react": "16.4.1",
     "react-native": "0.56.0",
-    "@types/react-native": "^0.57.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.1.1"
   }
 }
